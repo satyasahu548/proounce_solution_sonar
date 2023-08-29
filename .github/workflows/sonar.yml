@@ -1,6 +1,4 @@
 on:
-  # Trigger analysis when pushing in master or pull requests, and when creating
-  # a pull request. 
   push:
     branches:
       - master
@@ -11,20 +9,19 @@ on:
 name: SonarQube Scan
 jobs:
   sonarqube:
-    name: SonarQube Trigger
+    name: SonarQube Analysis
     runs-on: ubuntu-latest
     steps:
-      - name: Checking out
+      - name: Checking out code
         uses: actions/checkout@v2
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v2
         with:
-          # Disabling shallow clones is recommended for improving the relevancy of reporting
-          fetch-depth: 0
+          java-version: '11'  # Adjust the Java version if needed
+
       - name: SonarQube Scan
-        uses: kitabisa/sonarqube-action@v1.2.0
-        with:
-          host: ${{ secrets.SONARQUBE_HOST }}
-          login: ${{ secrets.SONARQUBE_TOKEN }}
-      - name: Run SonarCloud Analysis
-        uses: sonarsource/sonarcloud-github-action@master
+        run: |
+          ./gradlew sonarqube -Dsonar.host.url=https://your-sonarqube-server
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the correct secret name here
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
