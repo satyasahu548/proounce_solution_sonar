@@ -18,7 +18,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '11'  # Adjust the Java version if needed
+          java-version: '11.0.17'  # Adjust the Java version if needed
 
       - name: SonarQube Scan
         run: |
