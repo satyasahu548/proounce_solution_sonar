@@ -3,25 +3,19 @@ on:
     branches:
       - master
       - main
-  pull_request:
-    types: [opened, synchronize, reopened]
 
 name: SonarQube Scan
 jobs:
   sonarqube:
-    name: SonarQube Analysis
+    name: SonarQube Trigger
     runs-on: ubuntu-latest
     steps:
-      - name: Checking out code
+      - name: Checking out
         uses: actions/checkout@v2
       
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11.0.17'  # Adjust the Java version if needed
-
       - name: SonarQube Scan
-        run: |
-          ./gradlew sonarqube -Dsonar.host.url=https://your-sonarqube-server
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        uses: kitabisa/sonarqube-action@v1.2.0
+        with:
+          host: ${{ secrets.SONARQUBE_HOST }}
+          login: ${{ secrets.SONARQUBE_TOKEN }}
+          distribution: 'Community'  # Change this to match your SonarQube distribution
